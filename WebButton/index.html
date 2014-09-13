@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">        
+
+        <title>Arduino-Five Test</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Arduino + Johnny-Five Demo</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 well text-center">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-primary" onclick="setLED(1);">
+                        <input type="radio" name="options" id="on">ON
+                      </label>
+                      <label class="btn btn-primary" onclick="setLED(0);">
+                        <input type="radio" name="options" id="off">OFF
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <hr>
+                    <footer>
+                        <p>by <a href="https://twitter.com/esauOp">@esauOp</a>.</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+        <script>
+            var agentUrl = "http://localhost:8081/digitalwrite/13/"
+            function setLED(state) {
+                $.ajax({
+                    url: agentUrl + state,
+                    method: "GET",
+                    success: function(response) {
+                        console.log("Success");
+                    },
+                    error: function (request, status, error) {
+                        console.log("Whoops! Something went horribly wrong: " + error);
+                    }
+                });
+            };
+        </script>
+    </body>
+</html>
+

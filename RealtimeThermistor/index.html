@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">        
+
+        <title>Johnny-Five - Test</title>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Temperature</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1 id='temp' style="font-size: 72px;">??</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <hr>
+                    <footer class="text-center">
+                        <p>Powered by <a href="https://github.com/rwaldron/johnny-five">Johnny-Five</a>.</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+    <script>
+      var socket = io.connect('http://localhost:8081'); // cambia localhost por IP si accesas remoto.
+
+      socket.on('thermistor', function (data) {
+        console.log(data);
+        
+        if(isNumeric(data)) { data = data + ' ˚C'; }
+        else{ data = '??' }
+
+        var a = $('#temp');
+        a.text(data);
+      });
+
+      function isNumeric(n) {
+          return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
+    </script>
+    </body>
+</html>
