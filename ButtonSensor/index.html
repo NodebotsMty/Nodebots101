@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">        
+
+        <title>Johnny-Five - Test</title>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css">
+        <style>
+            /* SWITCH */
+            .cube-switch {
+                border-radius:10px;
+                border:1px solid rgba(0,0,0,0.4);
+                box-shadow: 0 0 8px rgba(0,0,0,0.6), inset 0 100px 50px rgba(255,255,255,0.1);
+                /* Prevents clics on the back */
+                cursor:default;    
+                display: block;
+                height: 100px;
+                position: relative;
+                margin: 5% 0px 0px 40%;
+                overflow:hidden;
+                /* Prevents clics on the back */
+                pointer-events:none;
+                width: 100px;
+                white-space: nowrap;
+                background:#333;
+            }
+
+            /* The switch */
+            .cube-switch .switch {
+                border:1px solid rgba(0,0,0,0.6);
+                border-radius:0.7em;
+                box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.3),
+                inset 0 -7px 0 rgba(0,0,0,0.2),
+                inset 0 50px 10px rgba(0,0,0,0.2),
+                0 1px 0 rgba(255,255,255,0.2);
+                display:block;
+                width: 60px;
+                height: 60px;
+                margin-left:-30px;
+                margin-top:-30px;
+                position:absolute;
+                top: 50%;
+                left: 50%;
+                width: 60px;
+             
+                background:#666;
+                transition: all 0.2s ease-out;
+
+                /* Allows click */
+                cursor:pointer;
+                pointer-events:auto;
+            }
+
+            /* SWITCH Active State */
+            .cube-switch.active {
+                /*background:#222;
+                box-shadow:
+                0 0 5px rgba(0,0,0,0.5),
+                inset 0 50px 50px rgba(55,55,55,0.1);*/
+            }
+
+            .cube-switch.active .switch {
+                background:#333;
+                box-shadow:
+                inset 0 6px 0 rgba(255,255,255,0.1),
+                inset 0 7px 0 rgba(0,0,0,0.2),
+                inset 0 -50px 10px rgba(0,0,0,0.1),
+                0 1px 0 rgba(205,205,205,0.1);
+            }
+
+            .cube-switch.active:after,
+            .cube-switch.active:before {
+                background:#333; 
+                box-shadow:
+                0 1px 0 rgba(255,255,255,0.1),
+                inset 1px 2px 1px rgba(0,0,0,0.5),
+                inset 3px 6px 2px rgba(200,200,200,0.1),
+                inset -1px -2px 1px rgba(0,0,0,0.3);
+            }
+
+            .cube-switch.active .switch:after,
+            .cube-switch.active .switch:before {
+                background:#222;
+                border:none;
+                margin-top:0;
+                height:1px;
+            }
+
+            .cube-switch .switch-state {
+                display: block;
+                position: absolute;
+                left: 40%;
+                color: #FFF;
+
+                font-size: .5em;
+                text-align: center;
+            }
+
+            /* SWITCH On State */
+            .cube-switch .switch-state.on {
+                bottom: 15%;
+            }
+
+            /* SWITCH Off State */
+            .cube-switch .switch-state.off {
+                top: 15%;
+            }
+
+            #light-bulb2 {
+            width: 150px;
+            height: 150px;
+            background: url(https://lh4.googleusercontent.com/-katLGTSCm2Q/UJC0_N7XCrI/AAAAAAAABq0/6GxNfNW-Ra4/s300/lightbulb.png) no-repeat 0 0;
+            }
+
+            #light-bulb {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            top: 12%;
+            left: 50%;
+            background: url(https://lh4.googleusercontent.com/-katLGTSCm2Q/UJC0_N7XCrI/AAAAAAAABq0/6GxNfNW-Ra4/s300/lightbulb.png) no-repeat -150px 0;
+            cursor: move;
+            z-index: 800;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h1>Porch Light</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                 <div href="" class="cube-switch">
+                    <span class="switch">
+                        <span class="switch-state off">Off</span>
+                        <span class="switch-state on">On</span>
+                    </span>
+                </div>
+                <div id="light-bulb" class="off ui-draggable" >
+                    <div id="light-bulb2" style="opacity: 0; "></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <hr>
+                    <footer class="text-center">
+                        <p>Powered by <a href="https://github.com/rwaldron/johnny-five">Johnny-Five</a>.</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
+        
+        
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
+    <script>
+      var socket = io.connect('http://localhost:8081'); // cambia localhost por IP si accesas remoto.
+
+      socket.on('press', function (data) {
+        console.log(data);
+
+        if (data=="1") {
+            $('.cube-switch').addClass('active');
+            $('#light-bulb2').css({'opacity': '1'});
+        } else {
+            $('.cube-switch').removeClass('active');
+            $('#light-bulb2').css({'opacity': '0'});
+        }
+        
+      });
+    </script>
+    </body>
+</html>
